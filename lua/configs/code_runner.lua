@@ -12,12 +12,15 @@ local function code_runner()
       -- Command table for various file types
       local ft_cmds = {
         python = "python3 " .. file,
-        c = "gcc -g " .. file .. " -o " .. filename_without_ext .. " && ./" .. filename_without_ext,
-        cpp = "g++ -g " .. file .. " -o " .. filename_without_ext .. " && ./" .. filename_without_ext,
+        c = "gcc -g -Wall -Wextra " .. file .. " -o " .. filename_without_ext .. " && ./" .. filename_without_ext,
+        cpp = "g++ -g -Wall -Wextra " .. file .. " -o " .. filename_without_ext .. " && ./" .. filename_without_ext,
         java = "javac " .. file .. " && java " .. filename_without_ext,
         javascript = "node " .. file,
         go = "go run " .. file,
-        -- Add more file types as needed
+        kt = "kotlinc " .. file .. " -g -Xemit-jvm-type-annotations -Xlint && java " .. filename_without_ext .. "Kt",
+        html = "python3 -m http.server 8000 --directory $(pwd) & termux-open http://localhost:8000/" .. file,
+        lua = "lua -e 'debugger=require(\"mobdebug\").start()' " .. file,
+        sh = "bash -x " .. file, -- `-x` for debug tracing
       }
 
       return ft_cmds[vim.bo.filetype]
